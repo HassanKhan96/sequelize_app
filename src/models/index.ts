@@ -22,6 +22,6 @@ let db: any = {};
 db.sequelize = sequelize;
 db.user = UserModel(sequelize);
 
-db.sequelize.sync();
+db.sequelize.sync().catch((error: Error) => console.log(error));
 
 export default db;

@@ -17,5 +17,5 @@ sequelize
 let db = {};
 db.sequelize = sequelize;
 db.user = (0, User_model_1.default)(sequelize);
-db.sequelize.sync();
+db.sequelize.sync().catch((error) => console.log(error));
 exports.default = db;

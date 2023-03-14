@@ -2,6 +2,11 @@ import { DataTypes, Sequelize } from "sequelize";
 
 export = (sequelize: Sequelize) => {
   const User = sequelize.define("users", {
+    id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
+    },
     firstName: {
       type: DataTypes.STRING,
     },
@@ -15,6 +20,11 @@ export = (sequelize: Sequelize) => {
     password: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    avatar: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: null,
     },
   });
   return User;
