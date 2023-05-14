@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
-import db from "../models";
 import { getAccessToken, getRefreshToken } from "../utils/jwt.utils";
 import { hashPassword, verifyPassword } from "../utils/password.utils";
+import { findUserByEmail, createUser } from "../services/user.services";
 
 export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
 
-    const user = await db.user.findOne({ where: { email } });
+    const user: any = await findUserByEmail(email);
     if (!user) throw new Error();
 
     await verifyPassword(password, user.password);
@@ -31,17 +31,17 @@ export const login = async (req: Request, res: Response) => {
 export const register = async (req: Request, res: Response) => {
   try {
     let { firstName, lastName, email, password } = req.body;
-    const userExists = await db.user.findOne({ where: { email } });
 
-    // if (userExists) res.status(409).send("email already in use");
+    const userExists = await findUserByEmail(email);
+    if (userExists) return res.status(409).send("email address already in use");
 
     const hash = await hashPassword(password);
 
-    const newUser = await db.user.create({
+    const newUser = await createUser({
       firstName,
       lastName,
       email,
-      password: hash,
+      password: hash as string,
     });
 
     const { refreshToken, accessToken, userInfo } = createLoginResponse(
@@ -52,6 +52,7 @@ export const register = async (req: Request, res: Response) => {
       expires: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000),
       httpOnly: true,
     });
+
     res.status(201).send({ user: userInfo, accessToken });
   } catch (error) {
     res.status(500).send({ message: "Error, cannot create user", error });

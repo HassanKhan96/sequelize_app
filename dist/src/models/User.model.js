@@ -26,6 +26,6 @@ module.exports = (sequelize) => {
             allowNull: true,
             defaultValue: null,
         },
-    });
+    }, { timestamps: true });
     return User;
 };

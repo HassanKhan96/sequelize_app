@@ -8,28 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateUser = exports.deleteUser = exports.getUserById = exports.getUsers = void 0;
-const models_1 = __importDefault(require("../models"));
+const user_services_1 = require("../services/user.services");
 const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield models_1.default.user.findAll({
-            attributes: { exclude: ["password"] },
-        });
+        const result = yield (0, user_services_1.findAllUsers)();
         res.status(200).send(result);
     }
     catch (error) {
@@ -40,9 +24,7 @@ exports.getUsers = getUsers;
 const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
-        const result = yield models_1.default.user.findByPk(id, {
-            attributes: { exclude: ["password"] },
-        });
+        const result = yield (0, user_services_1.findUserById)(id);
         if (!result)
             return res.status(404).send("user not found");
         res.status(200).send(result);
@@ -56,9 +38,10 @@ exports.getUserById = getUserById;
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
-        const result = models_1.default.user.destroy({ where: { id } });
-        if (result)
-            res.status(200).send("user deleted successfully");
+        const result = yield (0, user_services_1.deleteUserById)(id);
+        if (!result)
+            throw new Error("Cannot delete user.");
+        return res.status(200).send("user deleted successfully");
     }
     catch (error) {
         res.status(500).send(error);
@@ -70,15 +53,10 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const { id } = req.params;
         if (!req.body)
             return res.status(400).send("Bad request.");
-        const result = yield models_1.default.user.update(req.body, {
-            where: { id },
-            returning: true,
-            plain: true,
-        });
+        const result = yield (0, user_services_1.updateUserById)(id, req.body);
         if (!result.length)
             throw new Error("Sorry cannot update user");
-        const _a = result[1].toJSON(), { password } = _a, updatedData = __rest(_a, ["password"]);
-        return res.status(200).send(updatedData);
+        return res.status(200).send(result);
     }
     catch (error) {
         res.status(500).send(error);
