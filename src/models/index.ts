@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize";
 import UserModel from "./User.model";
+import FriendListModel from "./FriendList.model";
 
 const sequelize: Sequelize = new Sequelize(
   process.env.POSTGRES_DB as string,
@@ -20,8 +21,21 @@ sequelize
 let db: any = {};
 
 db.sequelize = sequelize;
-db.user = UserModel(sequelize);
+const User = UserModel(sequelize);
+const FriendList = FriendListModel(sequelize);
 
+User.belongsToMany(User, {
+  as: "UserId",
+  through: FriendList,
+  foreignKey: "userId1",
+});
+User.belongsToMany(User, {
+  as: "Friend",
+  through: FriendList,
+  foreignKey: "userId2",
+});
+
+db.user = User;
 db.sequelize.sync().catch((error: Error) => console.log(error));
 
 export default db;

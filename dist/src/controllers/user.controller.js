@@ -10,10 +10,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateUser = exports.deleteUser = exports.getUserById = exports.getUsers = void 0;
-const user_services_1 = require("../services/user.services");
+const services_1 = require("../services");
 const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield (0, user_services_1.findAllUsers)();
+        const result = yield (0, services_1.findAllUsers)();
         res.status(200).send(result);
     }
     catch (error) {
@@ -24,7 +24,7 @@ exports.getUsers = getUsers;
 const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
-        const result = yield (0, user_services_1.findUserById)(id);
+        const result = yield (0, services_1.findUserById)(id);
         if (!result)
             return res.status(404).send("user not found");
         res.status(200).send(result);
@@ -38,7 +38,7 @@ exports.getUserById = getUserById;
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
-        const result = yield (0, user_services_1.deleteUserById)(id);
+        const result = yield (0, services_1.deleteUserById)(id);
         if (!result)
             throw new Error("Cannot delete user.");
         return res.status(200).send("user deleted successfully");
@@ -53,7 +53,7 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const { id } = req.params;
         if (!req.body)
             return res.status(400).send("Bad request.");
-        const result = yield (0, user_services_1.updateUserById)(id, req.body);
+        const result = yield (0, services_1.updateUserById)(id, req.body);
         if (!result.length)
             throw new Error("Sorry cannot update user");
         return res.status(200).send(result);

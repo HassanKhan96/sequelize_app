@@ -4,6 +4,7 @@ dotenv.config();
 import helmet from "helmet";
 import UserRoutes from "./src/routes/user.routes";
 import AuthRoutes from "./src/routes/auth.routes";
+import FriendRoutes from "./src/routes/friend.routes";
 import cookieParser from "cookie-parser";
 import passport from "passport";
 import {
@@ -29,6 +30,11 @@ app.use(
   UserRoutes
 );
 app.use("/auth", AuthRoutes);
+app.use(
+  "/friend",
+  passport.authenticate("access-token", { session: false }),
+  FriendRoutes
+);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is listening on port ${process.env.PORT}`);

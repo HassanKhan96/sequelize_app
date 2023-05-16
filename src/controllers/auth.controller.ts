@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { getAccessToken, getRefreshToken } from "../utils/jwt.utils";
 import { hashPassword, verifyPassword } from "../utils/password.utils";
-import { findUserByEmail, createUser } from "../services/user.services";
+import { findUserByEmail, createUser } from "../services";
 
 export const login = async (req: Request, res: Response) => {
   try {

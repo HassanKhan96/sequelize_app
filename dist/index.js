@@ -9,6 +9,7 @@ dotenv_1.default.config();
 const helmet_1 = __importDefault(require("helmet"));
 const user_routes_1 = __importDefault(require("./src/routes/user.routes"));
 const auth_routes_1 = __importDefault(require("./src/routes/auth.routes"));
+const friend_routes_1 = __importDefault(require("./src/routes/friend.routes"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const passport_1 = __importDefault(require("passport"));
 const passport_2 = require("./src/middlewares/passport");
@@ -24,6 +25,7 @@ passport_1.default.use("refresh-token", passport_2.refreshTokenStrategy);
 //routes
 app.use("/user", passport_1.default.authenticate("access-token", { session: false }), user_routes_1.default);
 app.use("/auth", auth_routes_1.default);
+app.use("/friend", passport_1.default.authenticate("access-token", { session: false }), friend_routes_1.default);
 app.listen(process.env.PORT, () => {
     console.log(`Server is listening on port ${process.env.PORT}`);
 });
