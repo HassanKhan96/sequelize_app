@@ -29,3 +29,10 @@ app.use("/friend", passport_1.default.authenticate("access-token", { session: fa
 app.listen(process.env.PORT, () => {
     console.log(`Server is listening on port ${process.env.PORT}`);
 });
+process.once("SIGUSR2", function () {
+    process.kill(process.pid, "SIGUSR2");
+});
+process.on("SIGINT", function () {
+    // this is only called on ctrl+c, not restart
+    process.kill(process.pid, "SIGINT");
+});

@@ -4,7 +4,7 @@ export const getAccessToken = (data: any) => {
   const accessToken = sign(
     { data },
     process.env.ACCESS_TOKEN_SECRET as string,
-    { expiresIn: "30s" }
+    { expiresIn: "30d" }
   );
   return accessToken;
 };

@@ -1,5 +1,4 @@
 import db from "../models";
-import UserModel from "../models/User.model";
 
 export const createUser = async (input: {
   firstName: string;

@@ -25,10 +25,11 @@ const User = UserModel(sequelize);
 const FriendList = FriendListModel(sequelize);
 
 User.belongsToMany(User, {
-  as: "UserId",
+  as: "User",
   through: FriendList,
   foreignKey: "userId1",
 });
+
 User.belongsToMany(User, {
   as: "Friend",
   through: FriendList,
@@ -36,6 +37,7 @@ User.belongsToMany(User, {
 });
 
 db.user = User;
+db.friendList = FriendList;
 db.sequelize.sync().catch((error: Error) => console.log(error));
 
 export default db;
