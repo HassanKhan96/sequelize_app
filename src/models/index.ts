@@ -27,13 +27,13 @@ const FriendList = FriendListModel(sequelize);
 User.belongsToMany(User, {
   as: "User",
   through: FriendList,
-  foreignKey: "userId1",
+  foreignKey: "user_id1",
 });
 
 User.belongsToMany(User, {
   as: "Friend",
   through: FriendList,
-  foreignKey: "userId2",
+  foreignKey: "user_id2",
 });
 
 db.user = User;
