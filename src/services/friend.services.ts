@@ -49,3 +49,19 @@ export const getAllFriends = async (id: string) => {
   );
   return result;
 };
+
+export const unFriend = async (id: string) => {
+  const result = await db.friendList.destroy({
+    where: {
+      [Op.or]: [
+        {
+          user_id1: id,
+        },
+        {
+          user_id2: id,
+        },
+      ],
+    },
+  });
+  return result;
+};

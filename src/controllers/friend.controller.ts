@@ -4,6 +4,7 @@ import {
   acceptRequest,
   getAllFriends,
   declineRequest,
+  unFriend,
 } from "../services";
 
 export const sendFriendRequest = async (request: Request, res: Response) => {
@@ -31,7 +32,7 @@ export const declineFriendRequest = async (request: Request, res: Response) => {
   try {
     const requestId = request.params.id;
     const result = await declineRequest(requestId);
-    return res.status(200).json({ result });
+    return res.status(200).send({ result });
   } catch (error) {
     return res.status(500).send(error);
   }
@@ -45,5 +46,16 @@ export const getFriends = async (request: Request, res: Response) => {
   } catch (error) {
     console.log(error);
     return res.status(500).send(error);
+  }
+};
+
+export const unFriendUser = async (request: Request, res: Response) => {
+  try {
+    const id = request.params.id;
+    const result = await unFriend(id);
+    return res.status(200).send({ result });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
   }
 };
